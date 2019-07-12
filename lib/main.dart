@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List _toDoList = [];
+  List _toDoList = ["Márcio", "Quimbundo"];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,20 +33,38 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                                      child: TextField(
+                    child: TextField(
                       decoration: InputDecoration(
-                        labelText: "Nova Tarefa",
-                        labelStyle: TextStyle(color: Colors.black)
-                      ),
+                          labelText: "Nova Tarefa",
+                          labelStyle: TextStyle(color: Colors.black)),
                     ),
                   ),
                   RaisedButton(
-                    onPressed: (){},
+                    onPressed: () {},
                     color: Colors.amber,
                     child: Text("Add"),
                     textColor: Colors.white,
                   )
                 ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.only(top: 10.0),
+                itemCount: _toDoList.length,
+                itemBuilder: (context, index) {
+                  return CheckboxListTile(
+                    onChanged: (bool newValue) {
+                      setState(() {});
+                    },
+                    title: Text(_toDoList[index]["title"]),
+                    value: _toDoList[index]["ok"],
+                    secondary: CircleAvatar(
+                      child: Icon(
+                          _toDoList[index]["ok"] ? Icons.check : Icons.error),
+                    ),
+                  );
+                },
               ),
             )
           ],
