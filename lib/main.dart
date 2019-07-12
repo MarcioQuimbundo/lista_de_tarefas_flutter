@@ -20,7 +20,38 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Container(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Lista de Tarefas"),
+          backgroundColor: Colors.amberAccent,
+          centerTitle: true,
+        ),
+        body: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                                      child: TextField(
+                      decoration: InputDecoration(
+                        labelText: "Nova Tarefa",
+                        labelStyle: TextStyle(color: Colors.black)
+                      ),
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: (){},
+                    color: Colors.amber,
+                    child: Text("Add"),
+                    textColor: Colors.white,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
