@@ -7,9 +7,7 @@ void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: HomePage(),
-    theme: ThemeData(
-      hintColor: Colors.amber
-    ),
+    theme: ThemeData(hintColor: Colors.amber),
   ));
 }
 
@@ -22,6 +20,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _toDoController = TextEditingController();
   List _toDoList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _readData().then((data) {
+      setState(() {
+        _toDoList = json.decode(data);
+      });
+    });
+  }
 
   void _addTodo() {
     setState(() {
@@ -66,7 +74,10 @@ class _HomePageState extends State<HomePage> {
                   RaisedButton(
                     onPressed: _addTodo,
                     color: Colors.amber,
-                    child: Text("Add", style: TextStyle(color: Colors.black),),
+                    child: Text(
+                      "Add",
+                      style: TextStyle(color: Colors.black),
+                    ),
                     textColor: Colors.white,
                   )
                 ],
@@ -76,26 +87,45 @@ class _HomePageState extends State<HomePage> {
               child: ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                 itemCount: _toDoList.length,
-                itemBuilder: (context, index) {
-                  return CheckboxListTile(
-                    onChanged: (bool check) {
-                      setState(() {
-                        _toDoList[index]["ok"] = check;
-                        _saveData();
-                      });
-                    },
-                    title: Text(_toDoList[index]["title"], style: TextStyle(color: Colors.white)),
-                    value: _toDoList[index]["ok"],
-                    secondary: CircleAvatar(
-                      backgroundColor: Colors.amber,
-                      child: Icon(
-                          _toDoList[index]["ok"] ? Icons.check : Icons.error, color: Colors.black,),
-                    ),
-                  );
-                },
+                itemBuilder: _buildItem,
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItem(context, index) {
+    return Dismissible(
+      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment(-0.9, 0.0),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        onChanged: (bool check) {
+          setState(() {
+            _toDoList[index]["ok"] = check;
+            _saveData();
+          });
+        },
+        title: Text(_toDoList[index]["title"],
+            style: TextStyle(color: Colors.white)),
+        value: _toDoList[index]["ok"],
+        secondary: CircleAvatar(
+          backgroundColor: Colors.amber,
+          child: Icon(
+            _toDoList[index]["ok"] ? Icons.check : Icons.error,
+            color: Colors.black,
+          ),
         ),
       ),
     );
